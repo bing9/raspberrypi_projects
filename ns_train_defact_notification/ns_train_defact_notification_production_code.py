@@ -9,20 +9,20 @@
 # https://pypi.org/project/python-dotenv/
 # 
 
-# In[530]:
+# In[545]:
 
 
 #!pip install python-dotenvb
 #!pip install osa
 
 
-# In[531]:
+# In[546]:
 
 
 #pip install jupyter_helpers
 
 
-# In[532]:
+# In[547]:
 
 
 import http.client, urllib.request, urllib.parse, urllib.error, base64, pandas as pd
@@ -44,16 +44,16 @@ pd.set_option('display.max_columns', 300) # display 300 columns without shrinkin
 pd.set_option('display.max_rows', 100) # Show more rows
 
 
-# In[533]:
+# In[548]:
 
 
-# from dotenv import load_dotenv
-# load_dotenv(override=True)
+from dotenv import load_dotenv
+load_dotenv(override=True)
 
 
 # ## Manual data insert
 
-# In[534]:
+# In[549]:
 
 
 user_data=defaultdict()
@@ -69,7 +69,7 @@ with open('user_data.json', 'w') as fp:
 
 # # Workflow read json file
 
-# In[535]:
+# In[550]:
 
 
 with open('user_data.json') as json_file:
@@ -79,32 +79,32 @@ user_data = imported_json.copy()
 del user_data['session_key'], user_data['email_sent']
 
 
-# In[536]:
+# In[551]:
 
 
 session_key = imported_json.copy()['session_key']
 
 
-# In[537]:
+# In[552]:
 
 
 #imported_json
 
 
-# In[538]:
+# In[553]:
 
 
 #user_data
 
 
-# In[539]:
+# In[554]:
 
 
 # df_user_data = pd.DataFrame(user_data).T
 # df_user_data
 
 
-# In[540]:
+# In[555]:
 
 
 df_user_data = pd.DataFrame(user_data).T
@@ -115,19 +115,19 @@ df_user_data['diff'] = pd.to_datetime(df_user_data['search_date_time']) - pd.to_
 df_user_data_input = df_user_data[df_user_data['diff']>pd.Timedelta(0, unit='s')].sort_values(by='diff', ascending=True).head(1).to_dict(orient='records')
 
 
-# In[541]:
+# In[556]:
 
 
 #df_user_data
 
 
-# In[542]:
+# In[557]:
 
 
 #df_user_data_input
 
 
-# In[543]:
+# In[558]:
 
 
 def get_data_from_ns(from_uic, to_uic, search_date_time, **kwargs):
@@ -276,7 +276,7 @@ def get_data_from_ns(from_uic, to_uic, search_date_time, **kwargs):
             return 'False'
 
 
-# In[544]:
+# In[559]:
 
 
 #def check_which_job_to_run(df_user_data_input, ):
