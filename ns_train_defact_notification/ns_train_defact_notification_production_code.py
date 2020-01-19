@@ -9,20 +9,20 @@
 # https://pypi.org/project/python-dotenv/
 # 
 
-# In[479]:
+# In[530]:
 
 
 #!pip install python-dotenvb
 #!pip install osa
 
 
-# In[480]:
+# In[531]:
 
 
 #pip install jupyter_helpers
 
 
-# In[481]:
+# In[532]:
 
 
 import http.client, urllib.request, urllib.parse, urllib.error, base64, pandas as pd
@@ -30,11 +30,11 @@ import json
 import os
 from pandas.io.json import json_normalize
 import numpy as np
-from jupyter_helpers.namespace import NeatNamespace
+#from jupyter_helpers.namespace import NeatNamespace
 import datetime
 import time
 import requests
-import re
+#import re
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -44,7 +44,7 @@ pd.set_option('display.max_columns', 300) # display 300 columns without shrinkin
 pd.set_option('display.max_rows', 100) # Show more rows
 
 
-# In[482]:
+# In[533]:
 
 
 # from dotenv import load_dotenv
@@ -53,22 +53,23 @@ pd.set_option('display.max_rows', 100) # Show more rows
 
 # ## Manual data insert
 
-# In[483]:
+# In[534]:
 
 
-# user_data=defaultdict()
-# user_data['daily_work_leave'] = {'from_uic': 8400061, 'to_uic': 8400319, 'h':6, 'm':26, 'enabled':True}
-# user_data['daily_work_return'] = {'from_uic': 8400319, 'to_uic': 8400061, 'h':16, 'm':8, 'enabled':True}
-# user_data['session_key'] = 'None'
-# user_data['email_sent'] = 'False'
+user_data=defaultdict()
+user_data['daily_work_leave'] = {'from_uic': 8400061, 'to_uic': 8400319, 'h':6, 'm':26, 'enabled':True}
+user_data['daily_work_return_4'] = {'from_uic': 8400319, 'to_uic': 8400061, 'h':16, 'm':8, 'enabled':True}
+user_data['daily_work_return_6'] = {'from_uic': 8400319, 'to_uic': 8400061, 'h':18, 'm':38, 'enabled':True}
+user_data['session_key'] = 'None'
+user_data['email_sent'] = 'False'
 
-# with open('user_data.json', 'w') as fp:
-#     json.dump(user_data, fp)
+with open('user_data.json', 'w') as fp:
+    json.dump(user_data, fp)
 
 
 # # Workflow read json file
 
-# In[484]:
+# In[535]:
 
 
 with open('user_data.json') as json_file:
@@ -78,25 +79,32 @@ user_data = imported_json.copy()
 del user_data['session_key'], user_data['email_sent']
 
 
-# In[485]:
+# In[536]:
 
 
 session_key = imported_json.copy()['session_key']
 
 
-# In[486]:
+# In[537]:
 
 
 #imported_json
 
 
-# In[487]:
+# In[538]:
 
 
 #user_data
 
 
-# In[488]:
+# In[539]:
+
+
+# df_user_data = pd.DataFrame(user_data).T
+# df_user_data
+
+
+# In[540]:
 
 
 df_user_data = pd.DataFrame(user_data).T
@@ -104,10 +112,22 @@ df_user_data[df_user_data['enabled']==True]
 df_user_data['search_date_time'] = df_user_data.apply(lambda row: datetime.datetime.today().replace(hour=row.h, minute=row.m, second =0).strftime('%Y-%m-%dT%T%z') ,axis=1)
 df_user_data['current_date_time'] = datetime.datetime.today()
 df_user_data['diff'] = pd.to_datetime(df_user_data['search_date_time']) - pd.to_datetime(df_user_data['current_date_time'])
-df_user_data_input = df_user_data[df_user_data['diff']>pd.Timedelta(0, unit='s')].sort_values(by='diff').head(1).to_dict(orient='records')
+df_user_data_input = df_user_data[df_user_data['diff']>pd.Timedelta(0, unit='s')].sort_values(by='diff', ascending=True).head(1).to_dict(orient='records')
 
 
-# In[489]:
+# In[541]:
+
+
+#df_user_data
+
+
+# In[542]:
+
+
+#df_user_data_input
+
+
+# In[543]:
 
 
 def get_data_from_ns(from_uic, to_uic, search_date_time, **kwargs):
@@ -256,7 +276,7 @@ def get_data_from_ns(from_uic, to_uic, search_date_time, **kwargs):
             return 'False'
 
 
-# In[490]:
+# In[544]:
 
 
 #def check_which_job_to_run(df_user_data_input, ):
