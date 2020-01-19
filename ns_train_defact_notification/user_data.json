@@ -1,1 +1,1 @@
-{"daily_work_leave": {"from_uic": 8400061, "to_uic": 8400319, "h": 6, "m": 26, "enabled": true}, "daily_work_return": {"from_uic": 8400319, "to_uic": 8400061, "h": 16, "m": 8, "enabled": true}, "session_key": "None", "email_sent": "False"}
+{"daily_work_leave": {"from_uic": 8400061, "to_uic": 8400319, "h": 6, "m": 26, "enabled": true}, "daily_work_return": {"from_uic": 8400319, "to_uic": 8400061, "h": 18, "m": 38, "enabled": true}, "session_key": "None", "email_sent": "False"}
