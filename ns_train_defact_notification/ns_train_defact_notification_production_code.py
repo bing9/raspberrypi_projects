@@ -9,20 +9,20 @@
 # https://pypi.org/project/python-dotenv/
 # 
 
-# In[131]:
+# In[151]:
 
 
 #!pip install python-dotenvb
 #!pip install osa
 
 
-# In[132]:
+# In[152]:
 
 
 #pip install jupyter_helpers
 
 
-# In[133]:
+# In[153]:
 
 
 import http.client, urllib.request, urllib.parse, urllib.error, base64, pandas as pd
@@ -44,7 +44,7 @@ pd.set_option('display.max_columns', 300) # display 300 columns without shrinkin
 pd.set_option('display.max_rows', 100) # Show more rows
 
 
-# In[134]:
+# In[154]:
 
 
 from dotenv import load_dotenv
@@ -53,7 +53,7 @@ load_dotenv(override=True)
 
 # ## Manual data insert
 
-# In[135]:
+# In[155]:
 
 
 # user_data=defaultdict()
@@ -69,7 +69,7 @@ load_dotenv(override=True)
 
 # # Workflow read json file
 
-# In[136]:
+# In[156]:
 
 
 def read_user_data():
@@ -83,7 +83,7 @@ def read_user_data():
     del user_data['session_key'], user_data['email_sent']
 
     global session_key
-    session_key = imported_json.copy()['session_key']
+    session_key = imported_json['session_key']
 
     df_user_data = pd.DataFrame(user_data).T
     df_user_data[df_user_data['enabled']==True]
@@ -96,7 +96,7 @@ def read_user_data():
     return None
 
 
-# In[137]:
+# In[157]:
 
 
 def date_time_column(x):
@@ -112,7 +112,7 @@ def date_time_column(x):
     return x    
 
 
-# In[138]:
+# In[158]:
 
 
 def send_email(status, delayed_min, url_to_html ):
@@ -152,7 +152,7 @@ def send_email(status, delayed_min, url_to_html ):
     return None
 
 
-# In[139]:
+# In[159]:
 
 
 def connect_to_ns_api(from_uic, to_uic, search_date_time):
@@ -194,7 +194,7 @@ def connect_to_ns_api(from_uic, to_uic, search_date_time):
     return data
 
 
-# In[140]:
+# In[160]:
 
 
 def status(target_train):
@@ -222,7 +222,7 @@ def status(target_train):
     return status, int(delayed_min), url_to_html
 
 
-# In[141]:
+# In[161]:
 
 
 def get_data_from_ns(from_uic, to_uic, search_date_time, **kwargs):
@@ -272,7 +272,7 @@ def get_data_from_ns(from_uic, to_uic, search_date_time, **kwargs):
             return 'False'
 
 
-# In[142]:
+# In[162]:
 
 
 #def check_which_job_to_run(df_user_data_input, ):
@@ -281,6 +281,7 @@ read_user_data()
 if len(df_user_data_input)>0 and session_key != df_user_data_input[0]['search_date_time']:
     # If the search time has changed. Then re-initiate the status
     imported_json['session_key'] = df_user_data_input[0]['search_date_time']
+    session_key = imported_json['session_key']
     imported_json['email_sent'] = 'False'
 
     try:
