@@ -2,12 +2,12 @@
 # coding: utf-8
 
 # # NS delayes notification
-# 
+#
 # NS API address: https://www.ns.nl/en/travel-information/ns-api
-# 
+#
 # credentials management: https://dev.to/jamestimmins/django-cheat-sheet-keep-credentials-secure-with-environment-variables-2ah5
 # https://pypi.org/project/python-dotenv/
-# 
+#
 
 # In[151]:
 
@@ -74,10 +74,10 @@ load_dotenv(override=True)
 
 def read_user_data():
     global imported_json
-    
+
     with open('user_data.json') as json_file:
         imported_json = json.load(json_file)
-    
+
     global user_data
     user_data = imported_json.copy()
     del user_data['session_key'], user_data['email_sent']
@@ -90,7 +90,7 @@ def read_user_data():
     df_user_data['search_date_time'] = df_user_data.apply(lambda row: datetime.datetime.today().replace(hour=row.h, minute=row.m, second =0).strftime('%Y-%m-%dT%T%z') ,axis=1)
     df_user_data['current_date_time'] = datetime.datetime.today()
     df_user_data['diff'] = pd.to_datetime(df_user_data['search_date_time']) - pd.to_datetime(df_user_data['current_date_time'])
-    
+
     global df_user_data_input
     df_user_data_input = df_user_data[df_user_data['diff']>pd.Timedelta(0, unit='s')].sort_values(by='diff', ascending=True).head(1).to_dict(orient='records')
     return None
@@ -106,10 +106,10 @@ def date_time_column(x):
     for i in l:
         if i.find('DateTime')==-1:
             continue
-        else: 
+        else:
             date_time_col.append(i)
             x[i] = pd.to_datetime(x[i])
-    return x    
+    return x
 
 
 # In[158]:
@@ -129,8 +129,8 @@ def send_email(status, delayed_min, url_to_html ):
     # Create the plain-text and HTML version of your message
     text = """    Hi there,
     The train scheduled on {seach_date_time} has status {status} by {delayed_min} minutes.
-    """ 
-    html = ''  #requests.get(url_to_html).text 
+    """
+    html = ''  #requests.get(url_to_html).text
 
     # Turn these into plain/html MIMEText objects
     part1 = MIMEText(text, "plain")
@@ -148,7 +148,7 @@ def send_email(status, delayed_min, url_to_html ):
         server.login(sender_email, password)
         server.sendmail(
             sender_email, receiver_email, message.as_string()
-        )   
+        )
     return None
 
 
@@ -169,7 +169,7 @@ def connect_to_ns_api(from_uic, to_uic, search_date_time):
         'x-api-key': '',
         'Authorization': '',
         'Ocp-Apim-Subscription-Key': '%s' % key,
-    } 
+    }
 
     params = urllib.parse.urlencode({
         # Request parameters
@@ -184,9 +184,9 @@ def connect_to_ns_api(from_uic, to_uic, search_date_time):
         conn = http.client.HTTPSConnection('gateway.apiportal.ns.nl')
         conn.request("GET", "/public-reisinformatie/api/v3/trips?%s" % params, "{body}", headers)
         response = conn.getresponse()
-        
+
         data = response.read()
-        
+
         #print(data)
         conn.close()
     except Exception as e:
@@ -198,9 +198,9 @@ def connect_to_ns_api(from_uic, to_uic, search_date_time):
 
 
 def status(target_train):
-    
+
     status='normal'
-    delayed_min = 0 
+    delayed_min = 0
     url_to_html = target_train['meta_shareUrl'].values.item()['uri']
     if target_train['cancelled'].bool() == True:
         status = 'cancelled'
@@ -211,11 +211,11 @@ def status(target_train):
             if delayed_min > 5 :
                 status = 'delayed > 5 mins'
             else:
-                status = 'delayed <= 5 mins'
+                status = 'normal'
         except:
             if target_train['meta_status'].values.item() != 'NORMAL':
                 status = target_train['meta_status'].values.item()
-            else: 
+            else:
                 status = 'normal'
         pass
 
@@ -228,28 +228,28 @@ def status(target_train):
 def get_data_from_ns(from_uic, to_uic, search_date_time, **kwargs):
 
     data = connect_to_ns_api(from_uic, to_uic, search_date_time)
-    
+
     d = json.loads(data)
     lenghth = len(d)
     if lenghth >0:
         print(f'Data successfully got from NS. len={lenghth}')
-    
+
     df_unpack = json_normalize(data=d['trips'], record_path=['legs'], meta=['ctxRecon','status','transfers','plannedDurationInMinutes','actualDurationInMinutes','punctuality'
                                                                        , 'realtime','optimal','shareUrl'], errors='ignore',meta_prefix='meta_' , sep='_')
     #print(type(df_unpack['origin_plannedDateTime']))
-    
+
     date_time_column(df_unpack)
-    
+
     df_unpack['time_to_target'] = df_unpack['origin_plannedDateTime'].apply(lambda x: abs(x - pd.Timestamp(search_date_time+'+0100') ) )
     #print(df_unpack['time_to_target'])
-    
+
     #target_train = df_unpack.copy()[df_unpack['origin_plannedDateTime']==search_date_time+'+0100'].head(1)
     target_train = df_unpack.copy().sort_values(by='time_to_target', ascending =True).head(1)
     selected_len = len(target_train)
     #TODO: try to write function that get the n top values closes to target search time.
-    
+
     #date_time_column(target_train)
-    
+
     global status, delayed_min, url_to_html
     if selected_len>0:
         print(f'Target time selected. Time={search_date_time}')
@@ -257,7 +257,7 @@ def get_data_from_ns(from_uic, to_uic, search_date_time, **kwargs):
         print(f'Status {status}; Delayed {str(delayed_min)} mins.')
     else:
         print(f'No train selected for time {search_date_time}')
-        
+
 
     if status == 'normal':
         print('Train is Normal. No need to send email.')
@@ -291,7 +291,7 @@ if len(df_user_data_input)>0 and session_key != df_user_data_input[0]['search_da
             json.dump(imported_json, fp)
     except:
         print('error: email not sent')
-        
+
 elif len(df_user_data_input)>0:
     if imported_json['email_sent'] == 'True':
         print('Email already sent before. No need to duplicate.')
@@ -308,7 +308,3 @@ else:
 
 
 # In[ ]:
-
-
-
-
