@@ -1,0 +1,13 @@
+version: '3'
+services:
+  pi_projects:
+    image: pi_projects
+    build: .
+    volumes:
+     - /home/pi:/home/pi
+    ports:
+      - "1989:8888"
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    container_name: pi_projects
+    restart: "always"

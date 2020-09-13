@@ -1,0 +1,9 @@
+rq
+redis
+pandas
+numpy
+jupyterlab-scheduler
+readline
+ipywidgets
+jupyter
+jupyterlab
