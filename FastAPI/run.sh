@@ -1,0 +1,1 @@
+docker run -itd --name fastapi --network host -v /home/jetson/pi_projects/raspberrypi_projects/FastAPI:/home jetson/fastapi:latest
