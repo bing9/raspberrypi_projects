@@ -1,0 +1,25 @@
+{
+    "microsoft_xbox": {
+        "urls": ["https://www.xbox.com/nl-nl/consoles/xbox-series-x?cid=msft_web_collection",
+                 "https://www.xbox.com/de-de/consoles/xbox-series-x?cid=msft_web_collection&source=lp",
+                 "https://www.xbox.com/fr-fr/consoles/xbox-series-x?cid=msft_web_collection&source=lp"
+                ],
+        "keywords": [
+            "VERKOOPPUNT",
+            "WÄHLEN",
+            "REVENDEUR"
+        ]
+    },
+    "microsoft_halo": ["https://www.xbox.com/nl-nl/configure/8RPM8T9CK0P6?ranMID=24542&ranEAID=alVlsby6UJ8&ranSiteID=alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w&epi=alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w&irgwc=1&OCID=AID2200057_aff_7593_1243925&tduid=(ir__3gmmvrklm0kf6xmlzg20m1oqru2xrnhmrxml3oy900)(7593)(1243925)(alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w)()&irclickid=_3gmmvrklm0kf6xmlzg20m1oqru2xrnhmrxml3oy900&source=lp",
+                      "https://www.xbox.com/en-gb/configure/8RPM8T9CK0P6?ranMID=24542&ranEAID=alVlsby6UJ8&ranSiteID=alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w&epi=alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w&irgwc=1&OCID=AID2200057_aff_7593_1243925&tduid=(ir__3gmmvrklm0kf6xmlzg20m1oqru2xrnhmrxml3oy900)(7593)(1243925)(alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w)()&irclickid=_3gmmvrklm0kf6xmlzg20m1oqru2xrnhmrxml3oy900&source=lp",
+                      "https://www.xbox.com/de-de/configure/8RPM8T9CK0P6?ranMID=24542&ranEAID=alVlsby6UJ8&ranSiteID=alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w&epi=alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w&irgwc=1&OCID=AID2200057_aff_7593_1243925&tduid=(ir__3gmmvrklm0kf6xmlzg20m1oqru2xrnhmrxml3oy900)(7593)(1243925)(alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w)()&irclickid=_3gmmvrklm0kf6xmlzg20m1oqru2xrnhmrxml3oy900&source=lp",
+                      "https://www.xbox.com/fr-fr/configure/8RPM8T9CK0P6?ranMID=24542&ranEAID=alVlsby6UJ8&ranSiteID=alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w&epi=alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w&irgwc=1&OCID=AID2200057_aff_7593_1243925&tduid=(ir__3gmmvrklm0kf6xmlzg20m1oqru2xrnhmrxml3oy900)(7593)(1243925)(alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w)()&irclickid=_3gmmvrklm0kf6xmlzg20m1oqru2xrnhmrxml3oy900&source=lp",
+                      "https://www.xbox.com/nl-be/configure/8RPM8T9CK0P6?ranMID=24542&ranEAID=alVlsby6UJ8&ranSiteID=alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w&epi=alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w&irgwc=1&OCID=AID2200057_aff_7593_1243925&tduid=(ir__3gmmvrklm0kf6xmlzg20m1oqru2xrnhmrxml3oy900)(7593)(1243925)(alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w)()&irclickid=_3gmmvrklm0kf6xmlzg20m1oqru2xrnhmrxml3oy900&source=lp",
+                      "https://www.xbox.com/en-us/configure/8RPM8T9CK0P6?ranMID=24542&ranEAID=alVlsby6UJ8&ranSiteID=alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w&epi=alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w&irgwc=1&OCID=AID2200057_aff_7593_1243925&tduid=(ir__3gmmvrklm0kf6xmlzg20m1oqru2xrnhmrxml3oy900)(7593)(1243925)(alVlsby6UJ8-eozELSaEXsZZdSdj3MmJ5w)()&irclickid=_3gmmvrklm0kf6xmlzg20m1oqru2xrnhmrxml3oy900&source=lp",
+                      "https://www.xbox.com/nl-nl/configure/8WJ714N3RBTL",
+                      "https://www.xbox.com/en-gb/configure/8WJ714N3RBTL",
+                      "https://www.xbox.com/de-de/configure/8WJ714N3RBTL",
+                      "https://www.xbox.com/fr-fr/configure/8WJ714N3RBTL",
+                      "https://www.xbox.com/nl-be/configure/8WJ714N3RBTL",
+                      "https://www.xbox.com/en-us/configure/8WJ714N3RBTL"]
+}
