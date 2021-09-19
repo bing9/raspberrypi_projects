@@ -128,3 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 2019_conovarius/wuhan_travellers.xlsx
+
+app/@eaDir/
+FastAPI/fastapi_venv/
+FastAPI/app/@eaDir/
+FastAPI/app/apple-touch-icon-120x120-precomposed.png

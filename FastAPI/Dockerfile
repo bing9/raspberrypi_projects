@@ -1,10 +1,12 @@
 FROM python:3.7
 
-RUN pip install fastapi uvicorn
+RUN apt update && apt install sshpass
 
-EXPOSE 72
+RUN pip install fastapi uvicorn python-dotenv
+
+EXPOSE 80
 
 WORKDIR /home
 # COPY ./app /app
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "72", "--reload"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80", "--reload"]
