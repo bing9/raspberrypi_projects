@@ -7,10 +7,17 @@ Tracking the Product Prices accross major Distributors in the Netherlands.
 
 ### Product Selector
 - ProductId: internal product for parsing
-- ProductMapper: 
+- ProductMapper: Internal productId map to external productids in each distributor
+- URL maker: product URLs
+
 ### Price Fetcher
-### Trend Recorder
+- Input URL and export prices
+
+### Trend Analyzer
+- Input database and export trend analysis
+
 ### Change Notifier
+- Notify if threshold reached
 
 Project Organization
 ------------

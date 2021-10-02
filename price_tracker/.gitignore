@@ -87,3 +87,5 @@ target/
 
 # Mypy cache
 .mypy_cache/
+
+/price_tracker_python_env/
