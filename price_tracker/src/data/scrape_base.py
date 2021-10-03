@@ -3,9 +3,16 @@ from bs4 import BeautifulSoup
 from abc import ABC
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
 
 class ProductList(list):
-    pass
+    def save_prices_to_db(self, path: Path):
+        file_name = datetime.now().strftime("%Y-%m-%d %I:%M%p")
+        to_save_data = [p.to_records() for p in self]
+        if to_save_data:
+            with open(path/f"{file_name}.tsv", 'w') as file:
+                file.writelines(to_save_data)
+        
 
 @dataclass
 class Product:
@@ -15,7 +22,13 @@ class Product:
     url: str
     price: str
     original_price: str
-    scrape_datetime: datetime
+
+    def to_records(self):
+        return '\t'.join([self.provider if self.provider else '', 
+                    self.provider_id if self.provider_id else '', 
+                    self.name  if self.name else '', 
+                    self.price  if self.price else '', 
+                    self.original_price  if self.original_price else '' ])
 
 class BaseScraper(ABC):
     def __init__(self, url:str,

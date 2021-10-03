@@ -1,7 +1,8 @@
-from .scrape_base import Product, ProductList, BaseScraper
+from scrape_base import Product, ProductList, BaseScraper
 from bs4 import BeautifulSoup
-import requests
-from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 class BolScraper(BaseScraper):
     def get_productlist(self) -> ProductList:
@@ -11,7 +12,7 @@ class BolScraper(BaseScraper):
             try:
                 productlist.append(self.parse_one_product(i))
             except:
-                print(f"Skipped! cannot parse product: {i.attrs}")
+                logger.info(f"Skipped! Parsing product {i.attrs['data-id']} failed")
         return productlist
 
     def parse_one_product(self, product_bs4: BeautifulSoup) -> Product:
@@ -20,18 +21,32 @@ class BolScraper(BaseScraper):
             price = product_bs4.find('meta', attrs = {'itemprop': 'price'}).attrs['content']
         except: 
             price = None
+            logger.info("Price Failed")
         try:
             original_price = product_bs4.find('del', attrs = {'data-test': 'from-price'}).contents[0]
         except:
             original_price = None
+            logger.info("Original Price Failed")
+        try:
+            provider_id = product_bs4.attrs['data-id']
+        except:
+            provider_id = None
+            logger.info("Provider_id Failed")
+        try:
+            name = product_meta.contents[0]
+        except:
+            logger.info("Name Failed")
+        try:
+            url = 'https://bol.com'+ product_meta.attrs['href']
+        except:
+            logger.info("URL Failed")
         return Product(
             provider = 'bol',
-            provider_id = product_bs4.attrs['data-id'],
-            name = product_meta.contents[0],
-            url = 'https://bol.com'+ product_meta.attrs['href'],
+            provider_id = provider_id,
+            name = name,
+            url = url,
             price = price,
-            original_price = original_price,
-            scrape_datetime = datetime.now()
+            original_price = original_price
         )
 
 
