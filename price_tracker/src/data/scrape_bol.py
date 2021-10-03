@@ -1,6 +1,5 @@
-from .scrape_base import BaseScraper
+from .scrape_base import Product, ProductList, BaseScraper
 from bs4 import BeautifulSoup
-from .create_products import Product, ProductList
 import requests
 from datetime import datetime
 

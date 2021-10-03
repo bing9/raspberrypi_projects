@@ -8,7 +8,10 @@ def test_bolscraper():
     soup = scraper.page
     assert isinstance(soup, BeautifulSoup)
 
+@pytest.mark.webtest
 def test_productlist():
     url = 'https://www.bol.com/nl/nl/s/?searchtext=philips+sonicare'
     scraper = BolScraper(url)
-    
+    pl = scraper.get_productlist()
+    assert len(pl) >= 20
+    assert len(pl) <= 30

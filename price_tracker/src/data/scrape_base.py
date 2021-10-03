@@ -1,6 +1,21 @@
 import requests
 from bs4 import BeautifulSoup
 from abc import ABC
+from dataclasses import dataclass
+from datetime import datetime
+
+class ProductList(list):
+    pass
+
+@dataclass
+class Product:
+    provider: str
+    provider_id: str
+    name: str
+    url: str
+    price: str
+    original_price: str
+    scrape_datetime: datetime
 
 class BaseScraper(ABC):
     def __init__(self, url:str,
