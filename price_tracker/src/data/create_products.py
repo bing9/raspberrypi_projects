@@ -1,10 +1,20 @@
 from typing import Union
+from dataclasses import dataclass
+from datetime import datetime
 
 class ProductList(list):
     pass
 
+@dataclass
 class Product:
-    pass
+    provider: str
+    provider_id: str
+    name: str
+    url: str
+    price: str
+    original_price: str
+    scrape_datetime: datetime
+
 
 class SearchTerm:
     '''Search term is the product name for searching'''

@@ -4,10 +4,15 @@ from abc import ABC
 
 class BaseScraper(ABC):
     def __init__(self, url:str,
+        page: BeautifulSoup = None,
         **kwargs):
         self.url = url
+        self._page = page
         self.kwargs = kwargs
-
-    def get_webcontent(self):
-        soup = BeautifulSoup(requests.get(self.url, **self.kwargs))
-        return soup
+    
+    @property
+    def page(self):
+        if self._page == None:
+            content = requests.get(self.url, **self.kwargs).content
+            self._page = BeautifulSoup(content, features="lxml")
+        return self._page
