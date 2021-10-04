@@ -12,16 +12,9 @@ import pandas as pd
 # find .env automagically by walking up directories until it's found, then
 # load up the .env entries as environment variables
 load_dotenv(find_dotenv())
-
-data_dir = project_dir/'data'/'raw'
-
-full_list = list(data_dir.glob('*.tsv'))
-max_file = max(full_list, key = lambda x: x.stat().st_mtime )
-
-partial_list = full_list.copy()
-partial_list.remove(max_file)
-
-second_max_file = max(partial_list, key = lambda x: x.stat().st_mtime )
+data_dir = project_dir/'data'/'external'
+max_file = data_dir /'new_price.tsv'
+second_max_file = data_dir / 'old_price.tsv'
 
 df_max = pd.read_csv(max_file, sep = '\t')
 
@@ -34,16 +27,25 @@ df = pd.merge(df_second_max, df_max, left_on = ['provider_id'], right_on = ['pro
 
 df['discount'] = 1 - df['price'] / df['price_old']
 
-df_notify = df[df['discount'] >=0.05]
+df_notify = df[df['discount'] >=0.1]
 
 cols = ['provider', 'name', 'price', 'price_old', 'URL']
 
 if len(df_notify)>0:
-    records = df_notify[cols].to_records(index = False)
-    message = '\n'.join([' '.join(i) for i in [cols]+records])
-    message = '😍 Price decreased! \n'+ message
-else:
-    message = "😫 No price changes!"
-
-n.send_hangout(message, os.environ['webhook'],
+    records = df_notify.to_dict(orient = 'records')
+    r = []
+    for record in records:
+        price = record['price']
+        original_price = record['price_old']
+        url = record['URL']
+        r.append('\n'.join([record['provider'], record['name'], f'{price}  ~{original_price}~',
+            f'<{url}|Product Link>'
+            ])
+                                                                                               )
+    message = '😍 Price decreased! \n'+ '\n\n'.join(r)
+    n.send_hangout(message, os.environ['webhook'],
             os.environ['space_id'], os.environ['thread_id'])
+else:
+    # message = "😫 No price changes!"
+    pass
+

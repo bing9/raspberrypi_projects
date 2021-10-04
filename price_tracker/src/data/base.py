@@ -4,16 +4,22 @@ from abc import ABC
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+import shutil
 
 class ProductList(list):
     def save_prices_to_db(self, path: Path):
         file_name = datetime.now().strftime("%Y-%m-%d %I:%M%p")
         headers = ['provider', 'provider_id', 'name', 'price', 'original_price', 'URL']
         to_save_data = ['\t'.join(headers)+'\n'] + [p.to_records()+'\n' for p in self]
+        raw_location = path/f"{file_name}.tsv"
+        old_file_location = path.parent/'external'/'old_price.tsv'
+        new_file_location = path.parent/'external'/'new_price.tsv'
         if to_save_data:
-            with open(path/f"{file_name}.tsv", 'w') as file:
+            with open(raw_location, 'w') as file:
                 file.writelines(to_save_data)
-        
+            # save for faster access
+            shutil.copy(new_file_location, old_file_location)
+            shutil.copy(raw_location, new_file_location)
 
 @dataclass
 class Product:
