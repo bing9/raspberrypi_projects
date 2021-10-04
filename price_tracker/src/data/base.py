@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 import shutil
+from typing import Optional
 
 class ProductList(list):
     def save_prices_to_db(self, path: Path):
@@ -38,6 +39,15 @@ class Product:
                     self.price  if self.price else '', 
                     self.original_price  if self.original_price else '',
                     self.url if self.url else ''])
+
+@dataclass
+class BaseLocator:
+    provider_id_locator: dict = None
+    name_locator: dict = None
+    url_locator: dict = None
+    price_locator: dict = None
+    original_price_locator: dict = None
+
 
 class BaseScraper(ABC):
     def __init__(self, url:str,

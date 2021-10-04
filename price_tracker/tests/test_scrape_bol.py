@@ -1,4 +1,4 @@
-from price_tracker.src.data.scrape_bol import *
+from src.data.scrape_bol import *
 import pytest
 from bs4 import BeautifulSoup
 
@@ -15,3 +15,6 @@ def test_productlist():
     pl = scraper.get_productlist()
     assert len(pl) >= 20
     assert len(pl) <= 30
+
+def test_locator():
+    pass

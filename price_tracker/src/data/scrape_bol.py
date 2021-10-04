@@ -1,8 +1,11 @@
-from base import Product, ProductList, BaseScraper
+from src.data.base import Product, ProductList, BaseScraper
 from bs4 import BeautifulSoup
 import logging
 
 logger = logging.getLogger(__name__)
+
+# class BolLocator(BaseLocator):
+#     product_list_locator = {'li', attrs = {'class': 'product-item--row'}}
 
 class BolScraper(BaseScraper):
     def get_productlist(self) -> ProductList:

@@ -1,7 +1,7 @@
 from typing import Iterable, Union
 import time
-from base import ProductList
-from scrape_bol import BolScraper
+from src.data.base import ProductList
+from src.data.scrape_bol import BolScraper
 
 class SearchTerm:
     '''Search term is the product name for searching'''

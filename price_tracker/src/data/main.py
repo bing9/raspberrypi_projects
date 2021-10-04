@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 from get_products import SearchTerm
-from base import ProductList
+from src.data.base import ProductList
 import os
 import time
 
