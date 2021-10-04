@@ -8,17 +8,24 @@ from dotenv import load_dotenv
 import os
 load_dotenv('./.env', override= True, verbose=True)
 
-def send_hangout(bot_message, webhook: str):
+def send_hangout(bot_message, webhook: str,
+            space_id: str = None, thread_id: str = None):
     try:
         message_headers = {'Content-Type': 'application/json; charset=UTF-8'}
 
         http_obj = Http()
+        if space_id and thread_id:
+            body = dumps({'text': str(bot_message),
+                        'thread': {"name": f"spaces/{space_id}/threads/{thread_id}"}
+                        })
+        else:
+            body = dumps({'text': str(bot_message)})
 
         response = http_obj.request(
             uri=webhook,
             method='POST',
             headers=message_headers,
-            body=dumps({'text': str(bot_message)}),
+            body=body,
         )
         return 'success'
     except:
