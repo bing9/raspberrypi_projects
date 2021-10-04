@@ -1,4 +1,4 @@
-from price_tracker.src.data.create_products import *
+from price_tracker.src.data.get_products import *
 import pytest
 
 def test_search_class():

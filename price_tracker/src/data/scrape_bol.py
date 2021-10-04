@@ -1,4 +1,4 @@
-from scrape_base import Product, ProductList, BaseScraper
+from base import Product, ProductList, BaseScraper
 from bs4 import BeautifulSoup
 import logging
 

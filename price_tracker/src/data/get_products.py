@@ -1,6 +1,6 @@
 from typing import Iterable, Union
 import time
-from scrape_base import ProductList
+from base import ProductList
 from scrape_bol import BolScraper
 
 class SearchTerm:

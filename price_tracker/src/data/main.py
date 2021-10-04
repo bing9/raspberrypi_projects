@@ -3,7 +3,10 @@ import click
 import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
-from create_products import SearchTerm
+from get_products import SearchTerm
+from base import ProductList
+import os
+import time
 
 # @click.command()
 # @click.argument('input_filepath', type=click.Path(exists=True))
@@ -15,9 +18,14 @@ def main():
     """
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
-    s = SearchTerm(search_term='philips sonicare', search_domain = 'bol.com', max_pages = 1)
-    pl = s.productlist
-    pl.save_prices_to_db(path = project_dir/'data'/'raw')
+    productlist = ProductList()
+    for search_term in eval(os.environ['bol_search_terms']):
+        s = SearchTerm(search_term=search_term, search_domain = 'bol.com',
+            max_pages = 1)
+        pl = s.productlist
+        productlist.extend(pl)
+        time.sleep(5)
+    productlist.save_prices_to_db(path = project_dir/'data'/'raw')
     return 'success'
 
 if __name__ == '__main__':

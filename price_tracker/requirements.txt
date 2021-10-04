@@ -12,4 +12,5 @@ pytest
 requests
 bs4
 lxml
-sqlite
+pandas
+httplib2
