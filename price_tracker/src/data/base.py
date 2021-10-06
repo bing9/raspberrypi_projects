@@ -6,6 +6,10 @@ from datetime import datetime
 from pathlib import Path
 import shutil
 from typing import Optional
+from selenium import webdriver
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ProductList(list):
     def save_prices_to_db(self, path: Path):
@@ -54,14 +58,47 @@ class BaseLocator:
 class BaseScraper(ABC):
     def __init__(self, url:str,
         page: BeautifulSoup = None,
+        driver_method = 'requests',
+        driver = None,
         **kwargs):
         self.url = url
         self._page = page
+        self._driver = driver
+        self.driver_method = driver_method
         self.kwargs = kwargs
+        logger.info(f"{driver_method} selected")
     
     @property
     def page(self):
         if self._page == None:
-            content = requests.get(self.url, **self.kwargs).content
+            if self.driver_method == 'selenium':
+                self.driver.get(self.url, **self.kwargs)
+                content = self.driver.page_source
+                logger.info('Page loaded using Selenium')
+            elif self.driver_method == 'requests':
+                content = self.driver.get(self.url, **self.kwargs).content
+                logger.info('Page loaded using requests')
             self._page = BeautifulSoup(content, features="lxml")
         return self._page
+    
+    @property
+    def driver(self):
+        if self._driver != None:
+            pass
+        else:
+            if self.driver_method.lower() == 'selenium':
+                self._driver = self.get_driver()
+            elif self.driver_method.lower() == 'requests':
+                self._driver = requests
+        return self._driver
+    
+    def get_driver(self, need_login=False):
+        driver = webdriver.Chrome()
+        if need_login:
+            raise NotImplementedError
+        return driver
+    
+    def close(self):
+        if self.driver_method == 'selenium':
+            self.driver.close()
+            logger.info('Selenium driver closed')

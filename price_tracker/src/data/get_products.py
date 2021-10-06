@@ -11,12 +11,15 @@ class SearchTerm:
         search_domain: str = 'bol.com',
         search_urls: list = None,
         productlist: ProductList = None,
-        max_pages: int = 5):
+        max_pages: int = 5,
+        **kwargs
+        ):
         self.search_term = search_term
         self._productlist = productlist
         self.search_domain = search_domain
         self._search_urls = [search_urls] if isinstance(search_urls, str) else search_urls
         self.max_pages = max_pages
+        self.kwargs = kwargs
         if self.search_domain not in SearchTerm.implemented_search_domains:
             raise SearchDomainNotImplementedError(
                 f"Please Use one of the implemented Domains: {SearchTerm.implemented_search_domains}")
@@ -37,15 +40,18 @@ class SearchTerm:
         pl = ProductList()
         for i in self.search_urls:
             try:
-                page_pl = self.Scraper(i).get_productlist()
+                s = self.Scraper(i, driver_method = self.kwargs.get('driver_method'))
+                page_pl = s.get_productlist()
                 if page_pl == []:
                     break
                 if isinstance(page_pl, list):
                     pl.extend(page_pl)
                 else:
                     pl.append(page_pl)
+                s.close()
                 time.sleep(5)
-            except: 
+            except:
+                s.close()
                 break
         return pl
     

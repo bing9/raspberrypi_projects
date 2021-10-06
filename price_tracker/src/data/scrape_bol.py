@@ -37,7 +37,7 @@ class BolScraper(BaseScraper):
             original_price = product_bs4.find('del', attrs = {'data-test': 'from-price'}).contents[0]
         except:
             original_price = None
-            logger.info("Original Price Failed")
+            logger.info("Original Price not exits")
         try:
             provider_id = product_bs4.attrs['data-id']
         except:

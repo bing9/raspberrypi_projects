@@ -21,7 +21,7 @@ def main(project_dir):
     productlist = ProductList()
     for search_term in eval(os.environ['bol_search_terms']):
         s = SearchTerm(search_term=search_term, search_domain = 'bol.com',
-            max_pages = 1)
+            max_pages = 1, driver_method = 'selenium')
         pl = s.productlist
         productlist.extend(pl)
         time.sleep(5)
