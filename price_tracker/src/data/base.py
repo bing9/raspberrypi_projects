@@ -10,7 +10,7 @@ from typing import Optional
 class ProductList(list):
     def save_prices_to_db(self, path: Path):
         file_name = datetime.now().strftime("%Y-%m-%d %I:%M%p")
-        headers = ['provider', 'provider_id', 'name', 'price', 'original_price', 'URL']
+        headers = ['provider', 'provider_id', 'name', 'price', 'original_price','hidden_price','URL']
         to_save_data = ['\t'.join(headers)+'\n'] + [p.to_records()+'\n' for p in self]
         raw_location = path/f"{file_name}.tsv"
         old_file_location = path.parent/'external'/'old_price.tsv'
@@ -30,6 +30,7 @@ class Product:
     url: str
     price: str
     original_price: str
+    hidden_price : Optional[str]
 
     def to_records(self):
         return '\t'.join([
@@ -38,6 +39,7 @@ class Product:
                     self.name  if self.name else '', 
                     self.price  if self.price else '', 
                     self.original_price  if self.original_price else '',
+                    self.hidden_price  if self.hidden_price else '',
                     self.url if self.url else ''])
 
 @dataclass
