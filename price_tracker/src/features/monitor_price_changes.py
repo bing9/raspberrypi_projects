@@ -22,8 +22,10 @@ def main(project_dir):
 
     df_max = pd.read_csv(max_file, sep = '\t')
     df_second_max = pd.read_csv(second_max_file, sep = '\t')
+    for df in [df_max, df_second_max]:
+        df['provider_id'] = df['provider_id'].astype('str')
 
-    df = pd.merge(df_second_max, df_max, left_on = ['provider_id'], right_on = ['provider_id'], 
+    df = pd.merge(df_second_max, df_max, on = ['provider', 'provider_id'], 
             suffixes = (None, '_old'))
 
     df['discount'] = 1 - df['price'] / df['price_old']
@@ -50,3 +52,5 @@ def main(project_dir):
         logger.info(message)
         print(message)
 
+if __name__=="__main__":
+    main(project_dir)

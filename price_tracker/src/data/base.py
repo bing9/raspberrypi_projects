@@ -46,16 +46,11 @@ class Product:
                     self.hidden_price  if self.hidden_price else '',
                     self.url if self.url else ''])
 
-@dataclass
-class BaseLocator:
-    provider_id_locator: dict = None
-    name_locator: dict = None
-    url_locator: dict = None
-    price_locator: dict = None
-    original_price_locator: dict = None
-
-
 class BaseScraper(ABC):
+    locators = dict(
+        product_search_result_locator = None
+        )
+
     def __init__(self, url:str,
         page: BeautifulSoup = None,
         driver_method = 'requests',
@@ -66,6 +61,7 @@ class BaseScraper(ABC):
         self._driver = driver
         self.driver_method = driver_method
         self.kwargs = kwargs
+        self._productlist = None
         logger.info(f"{driver_method} selected")
     
     @property
@@ -83,9 +79,7 @@ class BaseScraper(ABC):
     
     @property
     def driver(self):
-        if self._driver != None:
-            pass
-        else:
+        if self._driver == None:
             if self.driver_method.lower() == 'selenium':
                 self._driver = self.get_driver()
             elif self.driver_method.lower() == 'requests':
@@ -102,3 +96,22 @@ class BaseScraper(ABC):
         if self.driver_method == 'selenium':
             self.driver.close()
             logger.info('Selenium driver closed')
+
+    def get_productlist(self):
+        self._productlist_bs4 = self.page.find_all(**self.locators.get('product_search_result_locator'))
+        productlist = ProductList()
+        for i in self._productlist_bs4:
+            try:
+                productlist.append(self.parse_one_product(i))
+            except:
+                logger.info(f"Skipped! Parsing product {i.attrs['data-id']} failed")
+        return productlist
+    
+    @property
+    def productlist(self):
+        if self._productlist == None:
+            self._productlist = self.get_productlist()
+        return self._productlist
+    
+    def parse_one_product(self, product_bs4: BeautifulSoup):
+        pass

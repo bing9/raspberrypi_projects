@@ -4,44 +4,44 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class BolScraper(BaseScraper):
+class MediaMarktScraper(BaseScraper):
     locators = dict(
-        product_search_result_locator = {'name':'li', 'attrs' : {'class': 'product-item--row'}},
+        product_search_result_locator = {'name':'div', 'attrs' : {'class':'product-wrapper'}},
         )
+
     def parse_one_product(self, product_bs4: BeautifulSoup) -> Product:
-        product_meta = product_bs4.find('a', attrs = {'class': 'product-title'})
         try:
-            price_int = product_bs4.find('span', attrs = {'data-test': 'price'}).contents[0].strip()
-            price_frac = product_bs4.find('sup', attrs = {'data-test': 'price-fraction'}).contents[0].strip().strip('-')
-            price = '.'.join([price_int, price_frac])
+            prices = product_bs4.find('div', attrs = {'class': 'price', 'class': 'small'})
+            price = ''.join([i.contents[0] for i in prices.contents]).strip().strip('-').replace(',', '.')
         except: 
             price = None
             logger.info("Price Failed")
         try:
-            hidden_price = product_bs4.find('meta', attrs = {'itemprop': 'price'}).attrs['content']
+            hidden_price = None
         except: 
             hidden_price = None
             logger.info("Hidden Price Failed")
         try:
-            original_price = product_bs4.find('del', attrs = {'data-test': 'from-price'}).contents[0]
+            old_prices = product_bs4.find('div', attrs = {'class': 'price-old', 'class': 'price'})
+            original_price = ''.join([i.contents[0] for i in old_prices.contents]).strip().strip('-').replace(',', '.')
         except:
             original_price = None
             logger.info("Original Price not exits")
         try:
-            provider_id = product_bs4.attrs['data-id']
+            provider_id = product_bs4.attrs['data-reco-pid']
         except:
             provider_id = None
             logger.info("Provider_id Failed")
         try:
-            name = product_meta.contents[0]
+            name = product_bs4.find('img').attrs['alt']
         except:
             logger.info("Name Failed")
         try:
-            url = 'https://bol.com'+ product_meta.attrs['href']
+            url = 'https://mediamarkt.nl'+ product_bs4.find('a').attrs['data-clickable-href']
         except:
             logger.info("URL Failed")
         return Product(
-            provider = 'bol',
+            provider = 'mediamarkt',
             provider_id = provider_id,
             name = name,
             url = url,

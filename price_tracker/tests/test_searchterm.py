@@ -1,4 +1,5 @@
-from src.data.get_products import *
+from src.data.searchterm import *
+from src.data.base import ProductList
 import pytest
 
 def test_search_class():
@@ -18,3 +19,9 @@ def test_search_urls():
 def test_search_terms():
     s = SearchTerm(search_term='philips sonicare', search_domain = 'bol.com')
     assert len(s.productlist) >=100 and len(s.productlist) <=200
+
+@pytest.mark.webtest
+def test_search_mediamarkt_terms():
+    s = SearchTerm(search_term='philips sonicare', search_domain = 'mediamarkt.nl', max_pages = 1,
+        driver_method = 'selenium')
+    assert len(s.productlist) >=9 and len(s.productlist) <=20
