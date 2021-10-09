@@ -72,6 +72,7 @@ class SearchTerm:
             raise NotImplementedError
 
     def parse_search_terms(self):
+        logger.info(f"preparing search {self.search_term}")
         return [i.lower() for i in self.search_term.strip().split(' ')]
 
     def construct_search_urls(self):

@@ -44,6 +44,7 @@ def main(project_dir, max_worker = 1):
         for i in iterator:
             pl = execute_search(i)
             productlist.extend(pl)
+            time.sleep(2)
 
     productlist.save_prices_to_db(path = project_dir/'data'/'raw')
     return 'success'

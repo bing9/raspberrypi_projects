@@ -17,15 +17,15 @@ def main(project_dir):
     # load up the .env entries as environment variables
     load_dotenv(find_dotenv())
     data_dir = project_dir/'data'/'external'
-    max_file = data_dir /'new_price.tsv'
-    second_max_file = data_dir / 'old_price.tsv'
+    new_file = data_dir /'new_price.tsv'
+    old_file = data_dir / 'old_price.tsv'
 
-    df_max = pd.read_csv(max_file, sep = '\t')
-    df_second_max = pd.read_csv(second_max_file, sep = '\t')
-    for df in [df_max, df_second_max]:
+    df_new = pd.read_csv(new_file, sep = '\t')
+    df_old = pd.read_csv(old_file, sep = '\t')
+    for df in [df_new, df_old]:
         df['provider_id'] = df['provider_id'].astype('str')
 
-    df = pd.merge(df_second_max, df_max, on = ['provider', 'provider_id'], 
+    df = pd.merge(df_new, df_old, on = ['provider', 'provider_id'], 
             suffixes = (None, '_old'))
 
     df['discount'] = 1 - df['price'] / df['price_old']

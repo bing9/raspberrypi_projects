@@ -8,6 +8,7 @@ import shutil
 from typing import Optional
 from selenium import webdriver
 import logging
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -69,6 +70,7 @@ class BaseScraper(ABC):
         if self._page == None:
             if self.driver_method == 'selenium':
                 self.driver.get(self.url, **self.kwargs)
+                time.sleep(2)
                 content = self.driver.page_source
                 logger.info('Page loaded using Selenium')
             elif self.driver_method == 'requests':
