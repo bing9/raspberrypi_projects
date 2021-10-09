@@ -1,18 +1,19 @@
 from src.data.base import Product, BaseScraper
 from bs4 import BeautifulSoup
 import logging
+import json
 
 logger = logging.getLogger(__name__)
 
-class MediaMarktScraper(BaseScraper):
+class BCCScraper(BaseScraper):
     locators = dict(
-        product_search_result_locator = {'name':'div', 'attrs' : {'class':'product-wrapper'}},
+        product_search_result_locator = {'name':'div', 'attrs' : {'class':'lister-product'}},
         )
 
     def parse_one_product(self, product_bs4: BeautifulSoup) -> Product:
+        meta_data = json.loads(product_bs4.find('script', attrs = {'class': 'js-analytics-data'}).text)
         try:
-            prices = product_bs4.find('div', attrs = {'class': 'price', 'class': 'small'})
-            price = ''.join([i.contents[0] for i in prices.contents]).strip().strip('-').replace(',', '.')
+            price = meta_data.get('price', '0')
         except: 
             price = None
             logger.info("Price Failed")
@@ -21,25 +22,24 @@ class MediaMarktScraper(BaseScraper):
         except: 
             hidden_price = None
         try:
-            old_prices = product_bs4.find('div', attrs = {'class': 'price-old', 'class': 'price'})
-            original_price = ''.join([i.contents[0] for i in old_prices.contents]).strip().strip('-').replace(',', '.')
+            original_price = None
         except:
             original_price = None
         try:
-            provider_id = product_bs4.attrs['data-reco-pid']
+            provider_id = meta_data.get('id', '0')
         except:
             provider_id = None
             logger.info("Provider_id Failed")
         try:
-            name = product_bs4.find('img').attrs['alt']
+            name = product_bs4.find('h3', attrs = {'class': 'h2'}).text
         except:
             logger.info("Name Failed")
         try:
-            url = 'https://mediamarkt.nl'+ product_bs4.find('a').attrs['data-clickable-href']
+            url = 'https://bcc.nl'+ product_bs4.find('a', attrs = {'class': 'lister-product__titlelink'}).attrs['href']
         except:
             logger.info("URL Failed")
         return Product(
-            provider = 'mediamarkt',
+            provider = 'bcc',
             provider_id = provider_id,
             name = name,
             url = url,

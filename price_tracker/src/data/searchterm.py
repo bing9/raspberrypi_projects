@@ -1,6 +1,7 @@
 from typing import Iterable, Union
 import time
 from src.data.scrape_mediamarkt import MediaMarktScraper
+from src.data.scrape_bcc import BCCScraper
 from src.data.base import ProductList
 from src.data.scrape_bol import BolScraper
 import logging
@@ -9,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class SearchTerm:
     '''Search term is the product name for searching'''
-    implemented_search_domains = ['bol.com', 'mediamarkt.nl']
+    implemented_search_domains = ['bol.com', 'mediamarkt.nl', 'bcc.nl']
 
     def __init__(self, search_term: str = None, 
         search_domain: str = 'bol.com',
@@ -68,6 +69,8 @@ class SearchTerm:
             return BolScraper
         elif 'mediamarkt' in self.search_domain:
             return MediaMarktScraper
+        elif 'bcc' in self.search_domain:
+            return BCCScraper
         else:
             raise NotImplementedError
 
@@ -83,6 +86,9 @@ class SearchTerm:
         elif 'mediamarkt' in self.search_domain:
             # https://www.mediamarkt.nl/nl/search.html?query=galaxy+tab+s7&searchProfile=onlineshop&channel=mmnlnl&page=2
             return [f'https://www.mediamarkt.nl/nl/search.html?query={search_text}&searchProfile=onlineshop&channel=mmnlnl&page={i}' for i in range(1, self.max_pages+1)]
+        elif 'bcc' in self.search_domain:
+            # https://www.bcc.nl/search?fh_location=%2F%2Fcatalog01%2Fnl_NL%2Fchannel%3E%7Bm2ebcc2enl%7D&search=philips%2Bsonicare
+            return [f'https://www.bcc.nl/search?search={search_text}&index={i*18}' for i in range(0, self.max_pages)]
         else:
             NotImplementedError
 

@@ -21,12 +21,10 @@ class BolScraper(BaseScraper):
             hidden_price = product_bs4.find('meta', attrs = {'itemprop': 'price'}).attrs['content']
         except: 
             hidden_price = None
-            logger.info("Hidden Price Failed")
         try:
             original_price = product_bs4.find('del', attrs = {'data-test': 'from-price'}).contents[0]
         except:
             original_price = None
-            logger.info("Original Price not exits")
         try:
             provider_id = product_bs4.attrs['data-id']
         except:
