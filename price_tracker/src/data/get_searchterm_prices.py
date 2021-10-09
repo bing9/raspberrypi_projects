@@ -11,8 +11,13 @@ from concurrent.futures import ProcessPoolExecutor
 
 def execute_search(from_env):
     search_term, search_domain = from_env
+    if 'bol' in search_domain\
+        or 'bcc' in search_domain:
+        driver_method = 'requests'
+    else:
+        driver_method = 'selenium'
     s = SearchTerm(search_term=search_term, search_domain = search_domain,
-                max_pages = 1, driver_method = 'selenium')
+                max_pages = 1, driver_method = driver_method)
     return s.productlist
             
 

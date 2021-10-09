@@ -1,4 +1,3 @@
-from typing import Iterable, Union
 import time
 from src.data.scrape_mediamarkt import MediaMarktScraper
 from src.data.scrape_bcc import BCCScraper
@@ -48,18 +47,18 @@ class SearchTerm:
         pl = ProductList()
         for i in self.search_urls:
             try:
-                scraper = self.Scraper(i, driver_method = self.kwargs.get('driver_method', 'requests'))
-                page_pl = scraper.productlist
+                self.scraper = self.Scraper(i, driver_method = self.kwargs.get('driver_method', 'requests'))
+                page_pl = self.scraper.productlist
                 if page_pl == []:
                     break
                 if isinstance(page_pl, list):
                     pl.extend(page_pl)
                 else:
                     pl.append(page_pl)
-                scraper.close()
+                self.scraper.close()
                 time.sleep(5)
             except:
-                scraper.close()
+                self.scraper.close()
                 break
         return pl
     
@@ -75,7 +74,7 @@ class SearchTerm:
             raise NotImplementedError
 
     def parse_search_terms(self):
-        logger.info(f"preparing search {self.search_term}")
+        logger.info(f"preparing search {self.search_term} in domain {self.search_domain}")
         return [i.lower() for i in self.search_term.strip().split(' ')]
 
     def construct_search_urls(self):

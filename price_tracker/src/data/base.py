@@ -115,5 +115,50 @@ class BaseScraper(ABC):
             self._productlist = self.get_productlist()
         return self._productlist
     
-    def parse_one_product(self, product_bs4: BeautifulSoup):
+    @property
+    def Parser(self):
+        pass
+
+    def parse_one_product(self, product_bs4: BeautifulSoup) -> Product:
+        parser = self.Parser(product_bs4)
+        return Product(
+            provider = parser.provider,
+            provider_id = parser.provider_id,
+            name = parser.name,
+            url = parser.url,
+            price = parser.price,
+            original_price = parser.original_price,
+            hidden_price = parser.hidden_price
+        )
+
+class BaseSearchProductParser(ABC):
+    def __init__(self, product_bs4: BeautifulSoup):
+        self.product_bs4 = product_bs4
+    
+    @property
+    def price(self):
+        pass
+
+    @property
+    def original_price(self):
+        return None
+
+    @property
+    def hidden_price(self):
+        return None
+        
+    @property
+    def provider(self):
+        pass
+
+    @property
+    def provider_id(self):
+        pass
+    
+    @property
+    def name(self):
+        pass
+    
+    @property
+    def url(self):
         pass
