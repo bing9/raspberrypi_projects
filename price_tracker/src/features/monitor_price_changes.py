@@ -18,7 +18,7 @@ def main(project_dir):
     load_dotenv(find_dotenv())
     data_dir = project_dir/'data'/'external'
     new_file = data_dir /'new_price.tsv'
-    old_file = data_dir / 'old_price.tsv'
+    old_file = data_dir / 'lowest_price.tsv'
 
     df_new = pd.read_csv(new_file, sep = '\t')
     df_old = pd.read_csv(old_file, sep = '\t')
