@@ -13,11 +13,15 @@ def read_csv(path):
     except:
         return None
 
-def calculate_min_prices(project_dir):
+def calculate_min_prices(project_dir, method = 'quick'):
     data_dir = project_dir/'data'/'raw'
     data_external = project_dir/'data'/'external'
+    if method == 'quick':
+        loop_dir = data_external
+    else:
+        loop_dir = data_dir
     with ProcessPoolExecutor() as pool:
-        dfs = pool.map(read_csv, data_dir.iterdir())
+        dfs = pool.map(read_csv, loop_dir.iterdir())
 
     df = pd.concat(dfs)
 
@@ -37,4 +41,4 @@ def calculate_min_prices(project_dir):
 
 if __name__ == '__main__':
     project_dir = Path(__file__).resolve().parents[2]
-    calculate_min_prices(project_dir)
+    calculate_min_prices(project_dir, method = 'full')
