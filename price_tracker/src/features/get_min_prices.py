@@ -41,7 +41,11 @@ def calculate_min_prices(project_dir, method = 'quick'):
     for i in ['price', 'original_price', 'hidden_price']:
         df[i] = df[i].apply(clean_numeric)
 
-    df = df.groupby(['provider', 'provider_id']).agg(name = ('name', 'max'), 
+    df_max = df.copy()
+    df_max.sort_values(by = 'price', ascending = False, inplace = True)
+    df_max.drop_duplicates(subset = ['provider', 'provider_id'], inplace = True)
+
+    df_min = df.groupby(['provider', 'provider_id']).agg(name = ('name', 'max'), 
             price = ('price', 'min'), max_price = ('price', 'max'),
             original_price = ('original_price', 'max'), 
             hidden_price = ('hidden_price', 'max'),
@@ -54,10 +58,11 @@ def calculate_min_prices(project_dir, method = 'quick'):
             'parse_date':'current_parse_date'},
             inplace = True)
 
-    df = pd.merge(df, df_new, on = ['provider', 'provider_id'], how = 'left')
-    df.sort_values(by = 'price', inplace = True)
+    df_min = pd.merge(df_min, df_new, on = ['provider', 'provider_id'], how = 'left')
+    df_min.sort_values(by = 'price', inplace = True)
     
-    df.to_csv(data_external/'lowest_price.tsv', index = False, sep = '\t')
+    df_min.to_csv(data_external/'lowest_price.tsv', index = False, sep = '\t')
+    df_max.to_csv(data_external/'highest_price.tsv', index = False, sep = '\t')
 
 if __name__ == '__main__':
     project_dir = Path(__file__).resolve().parents[2]
