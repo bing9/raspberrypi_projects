@@ -29,8 +29,10 @@ def main(project_dir):
             suffixes = (None, '_old'))
 
     df['discount'] = 1 - df['price'] / df['price_old']
-
-    df_notify = df[df['discount'] >=0.1]
+    df['discount_max'] = 1 - df['price'] / df['max_price']
+    df['discount_current'] = 1 - df['price'] / df['current_price']
+    df_notify = df[((df['discount'] >=-0.05) | (df['discount_max'] >= 0.45))
+                & (df['discount_current']>0)]
 
     if len(df_notify)>0:
         records = df_notify.to_dict(orient = 'records')
